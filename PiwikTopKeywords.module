@@ -1,0 +1,217 @@
+<?php
+
+/**
+ * ProcessWire Piwik Top Keywords Module
+ *
+ * @Author: Jasper Metselaar (formmailer), jasper@formmailer.net
+ *
+ * This module will fetch the Top Key Words for your site from Piwik (http://www.piwik.org), an open source
+ * alternative for Google Analytics, and display them as a tag cloud. The keywords
+ * will be linked to the sites search page.
+ * This is intended to be used directly from a template file. See usage below.
+ *
+ * USAGE
+ * -----
+ * 1. Add the following to your CSS style sheet:
+
+		#PiwikTagcloud {list-style-type:none; margin:0px; padding:0px; text-align: center;} 
+		#PiwikTagcloud li  {display:inline !important; margin-right:15px; line-height:1.5em;} 
+		#PiwikTagcloud li  a {display:inline; text-decoration: none;}
+		#PiwikTagcloud a:hover {text-decoration: underline;}
+		#PiwikTagcloud .smallest {font-size: 100%;}
+		#PiwikTagcloud .small {font-size: 125%;}
+		#PiwikTagcloud .medium {font-size:150%;}
+		#PiwikTagcloud .large {font-size:170%;}
+		#PiwikTagcloud .largest {font-size:200%;}
+ 
+ *  2. Add the following to your template:
+ 
+		$PiwikTopKeywords = $modules->get("PiwikTopKeywords");
+		$PiwikTopKeywords->piwik_url = "http://www.mydomain.com/piwik/"; //optional, if omitted the default value from the module configuration is used
+		$PiwikTopKeywords->piwik_token = "f0b2a04a482958e2675ab4c01aef6d2b"; //optional, if omitted the default value from the module configuration is used
+		$PiwikTopKeywords->search_url = "http://www.yourdomain.com/search/?q="; //optional, if omitted the default value from the module configuration is used
+		$PiwikTopKeywords->piwik_timerange = "month"; //optional, possible values: day, week, month or year
+		$PiwikTopKeywords->piwik_site_id = "4"; //optional, this is the Piwik Site ID, check your Piwik installation to find it. If omitted the default value from the module configuration is used.
+		$PiwikTopKeywords->piwik_max_keywords = "10";  //optional, if omitted the default value from the module configuration is used
+		$PiwikTopKeywords->DisplayTopKeywords();
+ 
+ * See also the $defaultConfigData below (first thing in the class) to see what
+ * options you can change at runtime. 
+ *
+ * Module is inteded for:
+ *
+ * ProcessWire 2.x 
+ * Copyright (C) 2011 by Ryan Cramer 
+ * Licensed under GNU/GPL v2, see LICENSE.TXT
+ * 
+ * http://www.processwire.com
+ * http://www.ryancramer.com
+ *
+ */
+
+class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
+
+	protected static $defaultConfigData = array(
+		'piwik_url' => '', 
+		'piwik_token' => '', 
+		'search_url' => '',
+		'piwik_timerange' => '',
+		'piwik_site_id' => '',
+		'piwik_max_kewords' => '',
+		); 
+
+	/**
+	 * Return general info about the module for ProcessWire
+	 *
+	 */
+	public static function getModuleInfo() {
+		return array(
+			'title' => 'Piwik Top Keywords', 
+			'version' => 100, 
+			'summary' => 'Creates a tag cloud, based on the Top Keywords for a site. The top keywords are fetched from Piwik, an open source alternative for Google Analytics. See the PiwikTopKeywords.module file for usage details.',
+			'href' => 'http://processwire.com/talk/index.php/topic,734.0.html',
+			'permanent' => false, 
+			'singular' => true, 
+			'autoload' => false, 
+			);
+	}
+
+	/**
+	 * Set the default config data
+	 *
+	 */
+	public function __construct() {
+		foreach(self::$defaultConfigData as $key => $value) {
+			$this->set($key, $value); 
+		}
+	}
+
+	/**
+	 * Necessary to fulfill Module interface, even though not using it currently
+	 *
+	 */
+	public function init() { }
+	
+	  
+
+	/**
+	 * Piwik Code
+	 *
+	 */
+	public function DisplayTopKeywords() {
+	// Build the api url
+	$api = "{$this->piwik_url}";
+	$api .= "?module=API&method=Referers.getKeywords";
+	$api .= "&idSite={$this->piwik_site_id}&period={$this->piwik_timerange}&date=yesterday";
+	$api .= "&format=PHP&filter_limit={$this->piwik_max_keywords}";
+	$api .= "&token_auth={$this->piwik_token}";
+	//Get the data from Piwik
+	$fetched = file_get_contents($api);
+	$content = unserialize($fetched);
+	// Throw a WireException if keyword fetching failed.
+	if(!$content) {
+		throw new WireException("Error fetching keywords. Content fetched = $fetched");
+	}
+	// Reset counters
+	$total_hits = 0;
+	$i=0;
+	foreach($content as $row) {
+		// Store keywords and hits in a new array
+		$keyword = htmlspecialchars(html_entity_decode(urldecode($row['label']), ENT_QUOTES), ENT_QUOTES);
+		$hits = $row['nb_visits'];
+		$keywords[$i]['keywords'] = $keyword;
+		$keywords[$i]['hits'] = $hits	;
+		// Calculating total number of hits for all keywords
+		$total_hits = $total_hits + $hits;
+		// Counter ($i) + 1
+		$i++;
+		}
+		//shuffle the array in order to get a nice cloud
+		shuffle($keywords);
+		echo "<div id='PiwikTagcloud'><ul>";
+		foreach($keywords as $keyword) {
+			// Calculate keyword popularity (% $hits of $total_hits)
+			$ratio = round(("$keyword[hits]"/$total_hits)*100);
+				/* 	Set CSS classes to create the tag cloud. It is possible to adjust the minimum and maximum values for each class.
+					I have chosen rather low values, because it seems unlikely that you would have multiple keywords some have a ratio
+					higher than 30% of all keyword hits.
+				*/
+				if ($ratio <= 10) {$class = "smallest";}
+				else if ($ratio > 10 and $ratio <= 15) {$class = "small";}
+				else if ($ratio > 15 and $ratio <= 20) {$class = "medium";}
+				else if ($ratio > 20 and $ratio <= 30) {$class = "large";}
+				else {$class = "largest";}
+			// Echo the keyword some a list item and link to the search page with a query parameter.	
+			echo "<li class='$class'><a href='{$this->search_url}$keyword[keywords]'>$keyword[keywords]</a></li>";
+			}
+		echo "</div></ul>";
+	}
+
+
+	/**
+	 * Provide fields for configuring this module
+	 *
+	 */
+	static public function getModuleConfigInputfields(array $data) {
+
+		$inputfields = new InputfieldWrapper();
+		$inputfields->description = 
+			"Select the default options for any given feed. Each of these may be overridden in the API, " . 
+			"so the options you select below should be considered defaults. ";
+
+		foreach(self::$defaultConfigData as $key => $value) {
+			if(!isset($data[$key])) $data[$key] = $value; 
+		}
+
+		$f = wire('modules')->get('InputfieldURL');
+		$f->attr('name', 'piwik_url');
+		$f->attr('value', $data['piwik_url']);
+		$f->label = "Piwik URL";
+		$f->description = "The URL of your Piwik installation. Eg. http://www.yourdomain.com/piwik/.";
+		$inputfields->add($f);
+
+		$f = wire('modules')->get('InputfieldText');
+		$f->attr('name', 'piwik_token');
+		$f->attr('value', $data['piwik_token']);
+		$f->label = "Piwik authentication token";
+		$f->description = "The API authentication token for accessing your Piwik installation. Eg. f0b2a04a482958e2675ab4c01aef6d2b.";
+		$inputfields->add($f);
+		
+		$f = wire('modules')->get('InputfieldURL');
+		$f->attr('name', 'search_url');
+		$f->attr('value', $data['search_url']);
+		$f->label = "Search URL/path";
+		$f->description = "The path to the search function of your site (include the query string). Eg. http://www.yourdomain.com/search/?q=";
+		$inputfields->add($f);
+		
+		$f1 = wire('modules')->get('InputfieldSelect');
+		$f1->attr('name', 'piwik_timerange');
+		$f1->attr('value', $data['piwik_timerange']);
+		$f1->label = "Time range";
+		$f1->description = "Select the timerange (Top Keywords from the last month, week or day).";
+		$f1->addOption('month');
+		$f1->addOption('week');
+		$f1->addOption('day');
+				
+		$f2 = wire('modules')->get('InputfieldInteger');
+		$f2->attr('name', 'piwik_max_keywords');
+		$f2->attr('value', (int) $data['piwik_max_keywords']);
+		$f2->label = "Maximum number of keywords";
+		$f2->description = "Enter the maximum number of keywords you want.";
+
+		$f3 = wire('modules')->get('InputfieldInteger');
+		$f3->attr('name', 'piwik_site_id');
+		$f3->attr('value', (int) $data['piwik_site_id']);
+		$f3->label = "Piwik Site ID";
+		$f3->description = "Check your Piwik installation for the site id of this site.";
+		
+		
+		$inputfields->add($f1);
+		$inputfields->add($f2);
+		$inputfields->add($f3);
+	
+		return $inputfields;
+
+	}
+
+}
