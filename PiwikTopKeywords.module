@@ -38,7 +38,7 @@
  * See also the $defaultConfigData below (first thing in the class) to see what
  * options you can change at runtime. 
  *
- * Module is inteded for:
+ * Module is intended for:
  *
  * ProcessWire 2.x 
  * Copyright (C) 2011 by Ryan Cramer 
@@ -132,9 +132,10 @@ class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
 		foreach($keywords as $keyword) {
 			// Calculate keyword popularity (% $hits of $total_hits)
 			$ratio = round(("$keyword[hits]"/$total_hits)*100);
-				/* 	Set CSS classes to create the tag cloud. It is possible to adjust the minimum and maximum values for each class.
-					I have chosen rather low values, because it seems unlikely that you would have multiple keywords some have a ratio
-					higher than 30% of all keyword hits.
+				/* 	Set CSS classes to create the tag cloud. It is possible to adjust the minimum and 
+					maximum values for each class.
+					I have chosen rather low values, because it seems unlikely that you would have 
+					multiple keywords some have a ratio higher than 30% of all keyword hits.
 				*/
 				if ($ratio <= 10) {$class = "smallest";}
 				else if ($ratio > 10 and $ratio <= 15) {$class = "small";}
