@@ -12,7 +12,7 @@
  *
  * USAGE
  * -----
- * 1. Add the following to your CSS style sheet:
+ * 1. Add the following to your CSS stylesheet:
 
 		#PiwikTagcloud {list-style-type:none; margin:0px; padding:0px; text-align: center;} 
 		#PiwikTagcloud li  {display:inline !important; margin-right:15px; line-height:1.5em;} 
