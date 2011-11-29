@@ -1,12 +1,16 @@
-How to install
-==============
+How to install 
+============== 
 
-First of all, if you don't use Piwik, an open source alternative for Google Analytics, go to http://www.piwik.org and see if 
-it's something for you. 
-If you use Piwik, you are good to go. :-)
+First of all, if you don't use Piwik, an open source alternative for 
+Google Analytics, go to http://www.piwik.org and see if it's something 
+for you. If you use Piwik, you are good to go. :-) 
 
-1. Just add the .module file to your site/modules/ folder and install the module (Piwik Top Keywords) under the Piwik section.
-   You can configure the module from ProcessWire's admin area, but you can also configure it during runtime.
+1. Just add the .module file to your site/modules/ folder and install 
+the module (Piwik Top Keywords) under the Piwik section. You can 
+configure the module from ProcessWire's admin area, but you can also 
+configure it during runtime. 
+
+
    
 2. Add the following to your CSS stylesheet:
 	#PiwikTagcloud {list-style-type:none; margin:0px; padding:0px; text-align: center;} 
@@ -29,12 +33,16 @@ Add the following to your template:
 
 Note: you may configure the module during runtime, like this:
 		$PiwikTopKeywords = $modules->get("PiwikTopKeywords");
-		$PiwikTopKeywords->piwik_url = "http://www.mydomain.com/piwik/"; //optional, if omitted the default value from the module configuration is used
-		$PiwikTopKeywords->piwik_token = "f0b2a04a482958e2675ab4c01aef6d2b"; //optional, if omitted the default value from the module configuration is used
-		$PiwikTopKeywords->search_url = "http://www.yourdomain.com/search/?q="; //optional, if omitted the default value from the module configuration is used
-		$PiwikTopKeywords->piwik_timerange = "month"; //optional, possible values: day, week, month or year
-		$PiwikTopKeywords->piwik_site_id = "4"; //optional, this is the Piwik Site ID, check your Piwik installation to find it. If omitted the default value from the module configuration is used.
-		$PiwikTopKeywords->piwik_max_keywords = "10";  //optional, if omitted the default value from the module configuration is used
+		// Optional settings, if if omitted the default setting from the module 
+		// configuration is used.
+		$PiwikTopKeywords->piwik_url = "http://www.mydomain.com/piwik/";
+		$PiwikTopKeywords->piwik_token = "f0b2a04a482958e2675ab4c01aef6d2b"; 
+		$PiwikTopKeywords->search_url = "http://www.yourdomain.com/search/?q=";
+		$PiwikTopKeywords->piwik_timerange = "month"; //possible values: day, week, month or year
+		$PiwikTopKeywords->piwik_site_id = "4"; // This is the Piwik Site ID, check your 
+												// Piwik installation to find it.
+		$PiwikTopKeywords->piwik_max_keywords = "10";
+		// The following is required
 		$PiwikTopKeywords->DisplayTopKeywords();	
 
 Credits

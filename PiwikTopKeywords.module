@@ -5,10 +5,14 @@
  *
  * @Author: Jasper Metselaar (formmailer), jasper@formmailer.net
  *
- * This module will fetch the Top Key Words for your site from Piwik (http://www.piwik.org), an open source
- * alternative for Google Analytics, and display them as a tag cloud. The keywords
- * will be linked to the sites search page.
- * This is intended to be used directly from a template file. See usage below.
+ * This module will fetch the Top Key Words for your site from Piwik 
+ * (http://www.piwik.org), an open source alternative for Google 
+ * Analytics, and display them as a tag cloud. The keywords will be
+ * linked to the sites search page. 
+ * This is intended to be used directly from a template file. See 
+ * usage below. 
+
+
  *
  * USAGE
  * -----
@@ -27,12 +31,16 @@
  *  2. Add the following to your template:
  
 		$PiwikTopKeywords = $modules->get("PiwikTopKeywords");
-		$PiwikTopKeywords->piwik_url = "http://www.mydomain.com/piwik/"; //optional, if omitted the default value from the module configuration is used
-		$PiwikTopKeywords->piwik_token = "f0b2a04a482958e2675ab4c01aef6d2b"; //optional, if omitted the default value from the module configuration is used
-		$PiwikTopKeywords->search_url = "http://www.yourdomain.com/search/?q="; //optional, if omitted the default value from the module configuration is used
-		$PiwikTopKeywords->piwik_timerange = "month"; //optional, possible values: day, week, month or year
-		$PiwikTopKeywords->piwik_site_id = "4"; //optional, this is the Piwik Site ID, check your Piwik installation to find it. If omitted the default value from the module configuration is used.
-		$PiwikTopKeywords->piwik_max_keywords = "10";  //optional, if omitted the default value from the module configuration is used
+		// Optional settings, if if omitted the default setting from the module 
+		// configuration is used.
+		$PiwikTopKeywords->piwik_url = "http://www.mydomain.com/piwik/";
+		$PiwikTopKeywords->piwik_token = "f0b2a04a482958e2675ab4c01aef6d2b"; 
+		$PiwikTopKeywords->search_url = "http://www.yourdomain.com/search/?q=";
+		$PiwikTopKeywords->piwik_timerange = "month"; //possible values: day, week, month or year
+		$PiwikTopKeywords->piwik_site_id = "4"; // This is the Piwik Site ID, check your 
+												// Piwik installation to find it.
+		$PiwikTopKeywords->piwik_max_keywords = "10";
+		// The following is requires
 		$PiwikTopKeywords->DisplayTopKeywords();
  
  * See also the $defaultConfigData below (first thing in the class) to see what
@@ -68,7 +76,10 @@ class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
 		return array(
 			'title' => 'Piwik Top Keywords', 
 			'version' => 100, 
-			'summary' => 'Creates a tag cloud, based on the Top Keywords for a site. The top keywords are fetched from Piwik, an open source alternative for Google Analytics. See the PiwikTopKeywords.module file for usage details.',
+			'summary' => 'Creates a tag cloud, based on the Top Keywords for a site. 
+						  The top keywords are fetched from Piwik, an open source 
+						  alternative for Google Analytics. See the 
+						  PiwikTopKeywords.module file for usage details.',
 			'href' => 'http://processwire.com/talk/index.php/topic,734.0.html',
 			'permanent' => false, 
 			'singular' => true, 
@@ -143,7 +154,9 @@ class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
 				else if ($ratio > 20 and $ratio <= 30) {$class = "large";}
 				else {$class = "largest";}
 			// Echo the keyword some a list item and link to the search page with a query parameter.	
-			echo "<li class='$class'><a href='{$this->search_url}$keyword[keywords]'>$keyword[keywords]</a></li> ";
+			echo "<li class='$class'>";
+			echo "<a href='{$this->search_url}$keyword[keywords]'>$keyword[keywords]</a>";
+			echo "</li>";
 			}
 		echo "</div></ul>";
 	}
@@ -175,14 +188,16 @@ class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
 		$f->attr('name', 'piwik_token');
 		$f->attr('value', $data['piwik_token']);
 		$f->label = "Piwik authentication token";
-		$f->description = "The API authentication token for accessing your Piwik installation. Eg. f0b2a04a482958e2675ab4c01aef6d2b.";
+		$f->description = "The API authentication token for accessing your Piwik installation. 
+						   Eg. f0b2a04a482958e2675ab4c01aef6d2b.";
 		$inputfields->add($f);
 		
 		$f = wire('modules')->get('InputfieldURL');
 		$f->attr('name', 'search_url');
 		$f->attr('value', $data['search_url']);
 		$f->label = "Search URL/path";
-		$f->description = "The path to the search function of your site (include the query string). Eg. http://www.yourdomain.com/search/?q=";
+		$f->description = "The path to the search function of your site (include the query string). 
+						   Eg. http://www.yourdomain.com/search/?q=";
 		$inputfields->add($f);
 		
 		$f1 = wire('modules')->get('InputfieldSelect');
