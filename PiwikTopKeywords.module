@@ -154,9 +154,7 @@ class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
 				else if ($ratio > 20 and $ratio <= 30) {$class = "large";}
 				else {$class = "largest";}
 			// Echo the keyword some a list item and link to the search page with a query parameter.	
-			echo "<li class='$class'>";
-			echo "<a href='{$this->search_url}$keyword[keywords]'>$keyword[keywords]</a>";
-			echo "</li>";
+			echo "<li class='$class'><a href='{$this->search_url}$keyword[keywords]'>$keyword[keywords]</a></li> ";
 			}
 		echo "</div></ul>";
 	}
