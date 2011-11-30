@@ -3,12 +3,18 @@
 /**
  * ProcessWire Piwik Top Keywords Module
  *
- * @Author: Jasper Metselaar (formmailer), jasper@formmailer.net
+ * Copyright 2011 by Jasper Metselaar (jasper@formmailer.net)
+ * Licensed under GNU/GPL v2, see http://processwire.com/about/license/
  *
  * This module will fetch the Top Key Words for your site from Piwik 
- * (http://www.piwik.org), an open source alternative for Google 
- * Analytics, and display them as a tag cloud. The keywords will be
+ * (http://piwik.org), an open source alternative for Google Analytics™,
+ * and display them as a tag cloud. The keywords will be
  * linked to the sites search page. 
+ *
+ * Piwik ® is an internationally registered trademark, currently 
+ * assigned to the project's founder and lead developer, Matthieu Aubry.
+ * More information: http://piwik.org/trademark/
+ *
  * This is intended to be used directly from a template file. See 
  * usage below. 
 

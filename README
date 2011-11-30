@@ -2,15 +2,13 @@ How to install
 ============== 
 
 First of all, if you don't use Piwik, an open source alternative for 
-Google Analytics, go to http://www.piwik.org and see if it's something 
+Google Analytics™, go to http://www.piwik.org and see if it's something
 for you. If you use Piwik, you are good to go. :-) 
 
 1. Just add the .module file to your site/modules/ folder and install 
 the module (Piwik Top Keywords) under the Piwik section. You can 
 configure the module from ProcessWire's admin area, but you can also 
 configure it during runtime. 
-
-
    
 2. Add the following to your CSS stylesheet:
 	#PiwikTagcloud {list-style-type:none; margin:0px; padding:0px; text-align: center;} 
@@ -45,7 +43,19 @@ Note: you may configure the module during runtime, like this:
 		// The following is required
 		$PiwikTopKeywords->DisplayTopKeywords();	
 
-Credits
-=======
+		
+Credits & Trademarks
+====================
 
-Developed by Jasper Metselaar (jasper@formmailer.net & twitter.com/jaspermetselaar)
+This ProcessWire module is written by Jasper Metselaar (jasper@formmailer.net &
+twitter.com/jaspermetselaar)
+The module is licensed under GNU/GPL v2, see http://processwire.com/about/license/
+
+ProcessWire 2.x, Copyright (C) 2010 by Ryan Cramer
+Licensed under GNU/GPL v2, see LICENSE.TXT
+http://processwire.com
+
+Piwik ® is an internationally registered trademark, currently assigned to the project's 
+founder and lead developer, Matthieu Aubry. More info: http://piwik.org/trademark/
+
+Google Analytics™ is a trademark of Google Inc.
