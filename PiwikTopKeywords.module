@@ -86,7 +86,7 @@ class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
 						  The top keywords are fetched from Piwik, an open source 
 						  alternative for Google Analytics. See the 
 						  PiwikTopKeywords.module file for usage details.',
-			'href' => 'http://processwire.com/talk/index.php/topic,734.0.html',
+			'href' => 'http://www.processwire.com/talk/topic/672-release-piwik-top-keywords-module',
 			'permanent' => false, 
 			'singular' => true, 
 			'autoload' => false, 
