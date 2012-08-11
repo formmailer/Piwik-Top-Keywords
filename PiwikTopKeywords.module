@@ -7,11 +7,11 @@
  * Licensed under GNU/GPL v2, see http://processwire.com/about/license/
  *
  * This module will fetch the Top Key Words for your site from Piwik 
- * (http://piwik.org), an open source alternative for Google Analytics™,
+ * (http://piwik.org), an open source alternative for Google Analyticsï¿½,
  * and display them as a tag cloud. The keywords will be
  * linked to the sites search page. 
  *
- * Piwik ® is an internationally registered trademark, currently 
+ * Piwik ï¿½ is an internationally registered trademark, currently 
  * assigned to the project's founder and lead developer, Matthieu Aubry.
  * More information: http://piwik.org/trademark/
  *
@@ -71,7 +71,7 @@ class PiwikTopKeywords extends WireData implements Module, ConfigurableModule {
 		'search_url' => '',
 		'piwik_timerange' => '',
 		'piwik_site_id' => '',
-		'piwik_max_kewords' => '',
+		'piwik_max_keywords' => '',
 		); 
 
 	/**
